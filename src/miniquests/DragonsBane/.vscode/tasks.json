@@ -1,0 +1,54 @@
+{
+  "tasks": [
+    {
+      "type": "cppbuild",
+      "label": "Compiler: Game",
+      "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "-Iinclude",
+        "-c",
+        "src\\dkeep\\logic\\Game.cpp",
+        "-o",
+        "Game.o"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "type": "cppbuild",
+      "label": "Linker: main",
+      "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "-Iinclude",
+        "src\\main.cpp",
+        "Game.o",
+        "-o",
+        "DragonsBane.exe"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": [
+        "Compiler: Game"
+      ]
+    },
+    {
+      "type": "cppbuild",
+      "label": "Build DragonsBane",
+      "command": "del",
+      "args": [
+        "*.o"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": [
+        "Linker: main"
+      ]
+    }
+  ],
+  "version": "2.0.0"
+}
