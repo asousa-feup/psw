@@ -11,8 +11,8 @@ is meant for the text editor Visual Studio Code - VS Code
    keyboard shortcut (`Ctrl+Shift+X`) or use the menu (View > Extensions)
 3. Search for `'C++'`
 4. Install the following extensions:
-   - C/C++
-   - C/C++ Extension Pack (optional)
+   - C/C++ by Microsoft
+   - C/C++ Extension Pack by Microsoft (optional)
 
 ## Install a compiler (MinGW-x64)
 
@@ -89,3 +89,12 @@ Hello World
 Welcome to Software Design (PSW) 2021/2022
 
 ```
+
+## Configuring CMake Tools (optional, but preferred)
+
+Source: https://vector-of-bool.github.io/docs/vscode-cmake-tools/settings.html
+
+1. Open VS Code Settings (File > Preferences > Settings)
+2. Extensions > CMake Tools configuration
+3. Set the path of your MinGW installation:
+   - `C:\mingw-w64\mingw64\bin`
