@@ -3,35 +3,38 @@
 #include <iostream>
 #include <vector>
 
+#include "dkeep/logic/Dragon.h"
+#include "dkeep/logic/Hero.h"
+#include "dkeep/logic/Maze.h"
+
 namespace dkeep {
 
 namespace logic {
 
 class Game {
  public:
-  std::vector<std::vector<char>> maze{
-      {'X','X','X','X','X','X','X','X','X','X'},
-      {'X','H',' ',' ',' ',' ',' ',' ',' ','X'},
-      {'X',' ','X','X',' ','X',' ','X',' ','X'},
-      {'X','D','X','X',' ','X',' ','X',' ','X'},
-      {'X',' ','X','X',' ','X',' ','X',' ','X'},
-      {'X',' ',' ',' ',' ',' ',' ','X',' ','E'},
-      {'X',' ','X','X',' ','X',' ','X',' ','X'},
-      {'X',' ','X','X',' ','X',' ','X',' ','X'},
-      {'X','K','X','X',' ',' ',' ',' ',' ','X'},
-      {'X','X','X','X','X','X','X','X','X','X'}};
+  Maze *maze;
+  Hero *hero;
+  Dragon *dragon;
+  Element *sword;
 
   bool has_key;
-  int hx, hy;
-  std::string output_message;
+  std::string output_msg;
 
  public:
   Game();
+  ~Game();
 
   std::vector<std::vector<char>>& GetMaze();
   std::string& GetOutputMessage();
 
-  bool Update(char &uc);
+  bool UpdateGame(char &uc);
+
+ private:
+  bool UpdateTurn(const Direction dir);
+  bool CheckDragonEncounter();
+  void TryToPickSword();
+  bool TryExit(const Direction dir);
 };
 
 }  // namespace dkeep::logic

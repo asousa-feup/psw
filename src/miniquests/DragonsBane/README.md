@@ -32,3 +32,11 @@ the following considerations in C++:
    - Analyze the `tasks.json` file for evaluating the structure of these types
      of files (possiblity of defining dependencies, parallel tasks, etc.)
 2. Run > Start Debugging OR Run Without Debugging
+
+### Dependencies
+
+```txt
+Maze.h -----> Element.h --------> Hero.h   --v
+  |      '----------------^  '--> Dragon.h -----> Game.h -----> main.cpp
+  '------------------------------------------^
+```

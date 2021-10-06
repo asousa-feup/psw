@@ -1,8 +1,83 @@
 {
   "tasks": [
+    // Build Maze
     {
       "type": "cppbuild",
-      "label": "Compiler: Game",
+      "label": "Build Maze",
+      "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "-Iinclude",
+        "-c",
+        "src\\dkeep\\logic\\Maze.cpp",
+        "-o",
+        "Maze.o"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build"
+    },
+
+    // Build Element
+    {
+      "type": "cppbuild",
+      "label": "Build Element",
+      "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "-Iinclude",
+        "-c",
+        "src\\dkeep\\logic\\Element.cpp",
+        "-o",
+        "Element.o"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build"
+    },
+
+    // Build Hero and Dragon
+    {
+      "type": "cppbuild",
+      "label": "Build Hero",
+      "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "-Iinclude",
+        "-c",
+        "src\\dkeep\\logic\\Hero.cpp",
+        "-o",
+        "Hero.o"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build"
+    },
+    {
+      "type": "cppbuild",
+      "label": "Build Dragon",
+      "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+      "args": [
+        "-g",
+        "-Iinclude",
+        "-c",
+        "src\\dkeep\\logic\\Dragon.cpp",
+        "-o",
+        "Dragon.o"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build"
+    },
+
+    // Build Game
+    {
+      "type": "cppbuild",
+      "label": "Build Game",
       "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
       "args": [
         "-g",
@@ -14,16 +89,23 @@
       ],
       "options": {
         "cwd": "${workspaceFolder}"
-      }
+      },
+      "group": "build"
     },
+
+    // Build main.cpp
     {
       "type": "cppbuild",
-      "label": "Linker: main",
+      "label": "Linker main.cpp",
       "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
       "args": [
         "-g",
         "-Iinclude",
         "src\\main.cpp",
+        "Maze.o",
+        "Element.o",
+        "Hero.o",
+        "Dagron.o",
         "Game.o",
         "-o",
         "DragonsBane.exe"
@@ -31,10 +113,10 @@
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "dependsOn": [
-        "Compiler: Game"
-      ]
+      "group": "build"
     },
+
+    // Remove unnecessary binaries
     {
       "type": "cppbuild",
       "label": "Build DragonsBane",
@@ -45,8 +127,18 @@
       "options": {
         "cwd": "${workspaceFolder}"
       },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOrder": "parallel",
       "dependsOn": [
-        "Linker: main"
+        "Build Maze",
+        "Build Element",
+        "Build Hero",
+        "Build Dragon",
+        "Build Game",
+        "Linker main.cpp"
       ]
     }
   ],

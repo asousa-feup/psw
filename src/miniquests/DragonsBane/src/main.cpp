@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     std::cin.ignore(INT_MAX, '\n');
 
     // update the game
-    is_game_over = game->Update(uc);
+    is_game_over = game->UpdateGame(uc);
     if (!is_game_over)
       std::cout << game->GetOutputMessage() << std::endl;
 
