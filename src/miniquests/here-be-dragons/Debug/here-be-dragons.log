@@ -1,4 +1,0 @@
-﻿  main.cpp
-C:\Users\sousa\OneDrive - INESC TEC\feup\courses\psw_software-design\git\psw\src\miniquests\here-be-dragons\src\main.cpp(5,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\sousa\OneDrive - INESC TEC\feup\courses\psw_software-design\git\psw\src\miniquests\here-be-dragons\src\main.cpp(7,23): warning C4018: '<': signed/unsigned mismatch
-  here-be-dragons.vcxproj -> C:\Users\sousa\OneDrive - INESC TEC\feup\courses\psw_software-design\git\psw\src\miniquests\here-be-dragons\Debug\here-be-dragons.exe
