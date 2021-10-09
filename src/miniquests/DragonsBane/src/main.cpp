@@ -1,15 +1,20 @@
 #include <iostream>
+#include <string>
 #include <vector>
 
 #include "dkeep/logic/Game.h"
 
+int AskNumberOfDragons();
 void PrintMaze(std::vector<std::vector<char>> &maze);
 
 int main(int argc, char** argv) {
 
   char uc;
   bool is_game_over = false;
-  dkeep::logic::Game *game = new dkeep::logic::Game();
+
+  int ndragons = AskNumberOfDragons();
+
+  dkeep::logic::Game *game = new dkeep::logic::Game(ndragons);
 
   do {
 
@@ -39,6 +44,34 @@ int main(int argc, char** argv) {
 
   // delete dynamically allocated variables
   delete game;
+}
+
+int AskNumberOfDragons() {
+/*
+ * std::atoi does not throw an exception when the conversion was not possible
+ *
+ * for exemplification purposes, we are using std::stoi to use exceptions
+ */
+  do {
+    std::cout << "How many dragons in the maze? (1-4) ";
+    
+    char n;
+    std::cin >> n;
+    std::string nstr(1,n);
+
+    std::cin.clear();
+    std::cin.ignore(INT_MAX, '\n');
+
+    try {
+      int nd = std::stoi(nstr);
+      if ((nd <= 0) || (nd > 4))
+        throw std::invalid_argument("Number must be between 1 and 4");
+      
+      return nd;
+    } catch (std::invalid_argument& e) {
+      std::cout << "Please enter a valid number" << std::endl;
+    }
+  } while (true);
 }
 
 void PrintMaze(std::vector<std::vector<char>> &maze) {

@@ -4,16 +4,21 @@ namespace dkeep {
 
 namespace logic {
 
-Game::Game() : has_key(false) , output_msg("") {
+Game::Game(int ndragons) : has_key(false) , output_msg("") {
   maze = new Maze();
   hero = new Hero(maze, 1, 1);
-  dragon = new Dragon(maze, 3, 1);
+  //dragon = new Dragon(maze, 3, 1);
   sword  = new Element(maze, 8, 1);
+
+  CreateDragons(ndragons);
 }
 
 Game::~Game() {
   delete sword;
-  delete dragon;
+  for (std::vector<Dragon*>::iterator it = dragons->begin();
+      it != dragons->end(); it++)
+    delete (*it);
+  delete dragons;
   delete hero;
   delete maze;
 }
@@ -47,24 +52,66 @@ bool Game::UpdateTurn(const Direction dir) {
   if (!TryExit(dir)) {
     hero->Move(dir);
     TryToPickSword();
-    return CheckDragonEncounter();
+    if ((!AreAllDragonsDead()) && (!DragonsKilledHero())) {
+      return DragonsMove();
+    } else if (AreAllDragonsDead()) return false;
+    else return true;
   } else return true;
 }
 
 
 
-bool Game::CheckDragonEncounter() {
-  if ((dragon->IsAlive()) && (dragon->AdjacentTo(hero))) {
-    if (hero->is_armed) {
-      dragon->SetAlive(false);
-      maze->ClearCell(dragon->GetX(), dragon->GetY());
-      hero->SetHasKey(true);
-    } else {
-      output_msg = "YOU DIED!";
-      return true;
+bool Game::AreAllDragonsDead() {
+  for (Dragon* dragon : *dragons)
+    if (dragon->IsAlive())
+      return false;
+  
+  return true;
+
+/* // Also valid...
+ * bool at_least_one_is_alive = false;
+ * for (Dragon* dragon : *dragons)
+ *   at_least_one_is_alive |= dragon->IsAlive();
+ * return (!at_least_one_is_alive);
+ */
+}
+
+void Game::CreateDragons(int ndragons) {
+  dragons = new std::vector<Dragon*>(ndragons);
+
+  for (int i = 0; i < ndragons; i++) {
+    (*dragons)[i] = new Dragon(maze, 1+i, 8);
+    maze->PlaceElement('D', 1+i, 8);
+/*
+ * You cannot use push_back when you preallocated the memory for the vector.
+ * If you do e.g. ndragons = 4, using push_back adds new elements to the vector
+ * with initial size of 4!!!
+ */
+  }
+}
+
+bool Game::DragonsKilledHero() {
+  for (Dragon* dragon : *dragons) {
+    if ((dragon->IsAlive()) && (dragon->AdjacentTo(hero))) {
+      if (hero->is_armed) {
+        dragon->SetAlive(false);
+        maze->ClearCell(dragon->GetX(), dragon->GetY());
+        hero->SetHasKey(AreAllDragonsDead());
+      } else {
+        output_msg = "YOU DIED!";
+        return true;
+      }
     }
   }
   return false;
+}
+
+bool Game::DragonsMove() {
+  for (Dragon* dragon : *dragons) {
+    if (!dragon->IsAlive()) continue;
+    dragon->Move();
+  }
+  return DragonsKilledHero();
 }
 
 void Game::TryToPickSword() {
@@ -76,16 +123,7 @@ bool Game::TryExit(const Direction dir) {
   int x = hero->GetX();
   int y = hero->GetY();
 
-  bool next_to_exit = false;
-
-  if ((!next_to_exit) && (dir == Direction::kNorth) && (maze->IsExit(x-1,y)))
-    next_to_exit = true;
-  if ((!next_to_exit) && (dir == Direction::kSouth) && (maze->IsExit(x+1,y)))
-    next_to_exit = true;
-  if ((!next_to_exit) && (dir == Direction::kEast) && (maze->IsExit(x,y+1)))
-    next_to_exit = true;
-  if ((!next_to_exit) && (dir == Direction::kWest) && (maze->IsExit(x,y-1)))
-    next_to_exit = true;
+  bool next_to_exit = maze->IsThere('E', x, y, dir);
   
   if (next_to_exit) {
     if (hero->HasKey()) {

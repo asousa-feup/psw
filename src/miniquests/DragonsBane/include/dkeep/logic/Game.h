@@ -15,14 +15,15 @@ class Game {
  public:
   Maze *maze;
   Hero *hero;
-  Dragon *dragon;
+  //Dragon *dragon;
+  std::vector<Dragon*> *dragons;
   Element *sword;
 
   bool has_key;
   std::string output_msg;
 
  public:
-  Game();
+  explicit Game(int ndragons);
   ~Game();
 
   std::vector<std::vector<char>>& GetMaze();
@@ -32,7 +33,10 @@ class Game {
 
  private:
   bool UpdateTurn(const Direction dir);
-  bool CheckDragonEncounter();
+  bool AreAllDragonsDead();
+  void CreateDragons(int ndragons);
+  bool DragonsKilledHero();
+  bool DragonsMove();
   void TryToPickSword();
   bool TryExit(const Direction dir);
 };

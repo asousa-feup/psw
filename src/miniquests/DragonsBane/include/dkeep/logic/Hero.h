@@ -2,16 +2,17 @@
 
 #include <iostream>
 
-#include "dkeep/logic/Element.h"
+#include "dkeep/logic/MoveableElement.h"
 
 namespace dkeep {
 
 namespace logic {
 
-class Hero : public Element {
+class Hero : public MoveableElement {
  public:
   bool is_armed;
   bool has_key;
+  char ch;
 
  public:
   explicit Hero(Maze *maze, int x0, int y0);
@@ -21,6 +22,7 @@ class Hero : public Element {
   void SetArmed(bool is_armed);
   void SetHasKey(bool has_key);
 
+  using MoveableElement::Move;
   void Move(const Direction dir);
 };
 

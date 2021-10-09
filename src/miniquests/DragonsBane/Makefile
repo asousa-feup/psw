@@ -25,7 +25,7 @@ LINKERFLAG = -lm
 
 
 # Compile ALL binaries
-all: Maze.o Element.o Hero.o Dragon.o Game.o DragonsBane.exe
+all: Maze.o Element.o MoveableElement.o Hero.o Dragon.o Game.o DragonsBane.exe
 
 # $@ matches target (%)
 # $< matches prerequisites (%.o), where target: prerequisites
@@ -35,6 +35,10 @@ Maze.o: src\dkeep\logic\Maze.cpp
 
 Element.o: src\dkeep\logic\Element.cpp
 	@echo "Creating object Element.o.."
+	${CXX} ${SRCS_FLAGS} -c $<
+
+MoveableElement.o: src\dkeep\logic\MoveableElement.cpp
+	@echo "Creating object MoveableElement.o.."
 	${CXX} ${SRCS_FLAGS} -c $<
 
 Hero.o: src\dkeep\logic\Hero.cpp
@@ -51,7 +55,7 @@ Game.o: src\dkeep\logic\Game.cpp
 
 
 DragonsBane.exe: src\main.cpp
-	${CXX} ${SRCS_FLAGS} $< Maze.o Element.o Hero.o Dragon.o Game.o -o $@
+	${CXX} ${SRCS_FLAGS} $< Maze.o Element.o MoveableElement.o Hero.o Dragon.o Game.o -o $@
 
 
 

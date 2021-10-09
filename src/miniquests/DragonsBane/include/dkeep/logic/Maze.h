@@ -17,7 +17,7 @@ class Maze {
       {'X','X','X','X','X','X','X','X','X','X'},
       {'X','H',' ',' ',' ',' ',' ',' ',' ','X'},
       {'X',' ','X','X',' ','X',' ','X',' ','X'},
-      {'X','D','X','X',' ','X',' ','X',' ','X'},
+      {'X',' ','X','X',' ','X',' ','X',' ','X'},
       {'X',' ','X','X',' ','X',' ','X',' ','X'},
       {'X',' ',' ',' ',' ',' ',' ','X',' ','E'},
       {'X',' ','X','X',' ','X',' ','X',' ','X'},
@@ -30,8 +30,10 @@ class Maze {
 
   void ClearCell(int x, int y);
   bool IsExit(int x, int y);
+  bool IsThere(char ch, int here_x, int here_y, Direction dir);
   bool CanMoveInto(int x, int y);
   void MoveElement(char ch, int sx, int sy, int dx, int dy);
+  void PlaceElement(char ch, int x, int y);
 };
 
 }  // namespace dkeep::logic
