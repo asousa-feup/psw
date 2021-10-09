@@ -13,6 +13,13 @@
 # - automate the build of the source files (almost the same commands copied for
 #   each source file...)
 
+#Windows detector - find rm in PATH
+ifeq ($(wildcard $(addsuffix /rm,$(subst :, ,$(PATH)))),)
+	WINMODE=1
+else
+	WINMODE=0
+endif
+
 .PHONY = all clean
 
 # Compiler to use
@@ -23,43 +30,52 @@ SRCS_FLAGS = -g -Iinclude
 LINKERFLAG = -lm
 
 
+OBJS := Maze.o Element.o MoveableElement.o Hero.o Dragon.o Game.o
 
-# Compile ALL binaries
-all: Maze.o Element.o MoveableElement.o Hero.o Dragon.o Game.o DragonsBane.exe
+###########################################################
+ifeq ($(WINMODE),1)  # native windows:
+###########################################################
 
-# $@ matches target (%)
-# $< matches prerequisites (%.o), where target: prerequisites
-Maze.o: src\dkeep\logic\Maze.cpp
-	@echo "Creating object Maze.o.."
-	${CXX} ${SRCS_FLAGS} -c $<
+all:  DragonsBane.exe
 
-Element.o: src\dkeep\logic\Element.cpp
-	@echo "Creating object Element.o.."
-	${CXX} ${SRCS_FLAGS} -c $<
+run: DragonsBane.exe
+	.\$<
 
-MoveableElement.o: src\dkeep\logic\MoveableElement.cpp
-	@echo "Creating object MoveableElement.o.."
-	${CXX} ${SRCS_FLAGS} -c $<
+DragonsBane.exe: src\main.cpp $(OBJS)
+	${CXX} ${SRCS_FLAGS} $< $(OBJS) -o $@
 
-Hero.o: src\dkeep\logic\Hero.cpp
-	@echo "Creating object Hero.o.."
-	${CXX} ${SRCS_FLAGS} -c $<
-
-Dragon.o: src\dkeep\logic\Dragon.cpp
-	@echo "Creating object Dragon.o.."
-	${CXX} ${SRCS_FLAGS} -c $<
-
-Game.o: src\dkeep\logic\Game.cpp
-	@echo "Creating object Game.o.."
-	${CXX} ${SRCS_FLAGS} -c $<
-
-
-DragonsBane.exe: src\main.cpp
-	${CXX} ${SRCS_FLAGS} $< Maze.o Element.o MoveableElement.o Hero.o Dragon.o Game.o -o $@
-
-
+%.o: src\dkeep\logic\%.cpp
+	@echo "Creating object $@.."
+	${CXX} ${SRCS_FLAGS} -c $^
 
 # Remove ALL binaries and objects
 clean:
 	@echo "Cleaning up..."
 	del /f *.o *.exe
+
+###########################################################
+else #Unix like
+###########################################################
+
+#Flag required to compile with Apple clang version
+SRCS_FLAGS += -std=c++11
+
+all:  DragonsBane
+
+run: DragonsBane
+	./$<
+
+DragonsBane: src/main.cpp $(OBJS)
+	${CXX} ${SRCS_FLAGS} $< $(OBJS) -o $@
+
+%.o: src/dkeep/logic/%.cpp
+	@echo "Creating object $@.."
+	${CXX} ${SRCS_FLAGS} -c $^
+
+clean:
+	@echo "Cleaning up..."
+	rm -f *.o DragonsBane
+
+###########################################################
+endif
+###########################################################

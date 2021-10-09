@@ -13,6 +13,13 @@
 # - automate the build of the source files (almost the same commands copied for
 #   each source file...)
 
+#Windows detector - find rm in PATH
+ifeq ($(wildcard $(addsuffix /rm,$(subst :, ,$(PATH)))),)
+	WINMODE=1
+else
+	WINMODE=0
+endif
+
 .PHONY = all clean
 
 # Compiler to use
@@ -22,19 +29,44 @@ CXX = g++
 SRCS_FLAGS = -g -Iinclude
 LINKERFLAG = -lm
 
-
-
+###########################################################
+ifeq ($(WINMODE),1)  # native windows:
+###########################################################
 # Compile ALL binaries
 all: HereBeDragons.exe
+
+run: HereBeDragons.exe
+	.\$<
 
 # $@ matches target (%)
 # $< matches prerequisites (%.o), where target: prerequisites
 HereBeDragons.exe: src\main.cpp
 	${CXX} ${SRCS_FLAGS} $< -o $@
 
-
-
 # Remove ALL binaries and objects
 clean:
 	@echo "Cleaning up..."
 	del /f *.o *.exe
+
+###########################################################
+else #Unix like
+###########################################################
+
+#Flag required to compile with Apple clang version
+SRCS_FLAGS += -std=c++11
+
+all: HereBeDragons
+
+run: HereBeDragons
+	./$<
+
+HereBeDragons: src/main.cpp
+	${CXX} ${SRCS_FLAGS} $< -o $@
+
+clean:
+	@echo "Cleaning up..."
+	rm -f *.o HereBeDragons
+
+###########################################################
+endif
+###########################################################
