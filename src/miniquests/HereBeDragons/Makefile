@@ -1,17 +1,7 @@
 # Usage:
-# mingw32-make       # compile ALL binaries
-# mingw32-make clean # remove ALL binaries and objects
-#
-# Execute the file:
-# - .\HereBeDragons (in a cmd)
-# - OR Open HereBeDragons.exe
-# Source: https://opensource.com/article/18/8/what-how-makefile
-#
-# Future developments:
-# - verify if the Makefile is compatible with input arguments of mingw32-make
-#   (see mingw32-make --help)
-# - automate the build of the source files (almost the same commands copied for
-#   each source file...)
+# mingw32-make					# build DragonsBane.exe
+# mingw32-make run			# run DragonsBane.exe
+# mingw32-make clean		# remove ALL binaries and objects
 
 #Windows detector - find rm in PATH
 ifeq ($(wildcard $(addsuffix /rm,$(subst :, ,$(PATH)))),)
@@ -20,14 +10,13 @@ else
 	WINMODE=0
 endif
 
-.PHONY = all clean
+.PHONY = all run clean
 
 # Compiler to use
 CXX = g++
 
 # Flags
-SRCS_FLAGS = -g -Iinclude
-LINKERFLAG = -lm
+SRCS_FLAGS = -g -std=c++11 -Iinclude
 
 ###########################################################
 ifeq ($(WINMODE),1)  # native windows:
@@ -51,9 +40,6 @@ clean:
 ###########################################################
 else #Unix like
 ###########################################################
-
-#Flag required to compile with Apple clang version
-SRCS_FLAGS += -std=c++11
 
 all: HereBeDragons
 
